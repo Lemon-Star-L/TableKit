@@ -147,7 +147,7 @@
 <p>在“数据工作区”下拉列表中选择目标表，切换到“预览 · 筛选 · 排序”。展开“显示 / 导出字段”，勾选需要的字段，再点击“应用并预览”。至少保留一个显示字段。</p>
 <p>切换当前表会重置该视图的筛选、排序和字段选择。可通过“上一页”“下一页”或页码跳转浏览数据；预览行数不代表全部结果行数。</p>
 <h3 id="42-设置筛选">4.2 设置筛选 </h3>
-<p>点击“＋ 条件”，依次设置字段、运算符、比较值和比较类型。多个条件必须同时成立，即 AND 关系。</p>
+<p>点击“＋ 条件”，依次设置字段、运算符、比较值和比较类型。在条件组合菜单选择 AND（全部满足）或 OR（任意满足）；该设置同时用于预览、统计、筛选导出及按条件删除。</p>
 <table>
 <thead>
 <tr>
@@ -174,7 +174,7 @@
 </tr>
 </tbody>
 </table>
-<p>数量、方量等大小比较应选择“数值”；件号、仓库名称等选择“文本”。“包含”“不包含”按文本匹配。文本比较区分大小写，空字符串或缺失值按空值处理，纯空格文本不自动视为空值。</p>
+<p>数量、方量等大小比较应选择“数值”；件号、仓库名称等选择“文本”。“包含”“不包含”按文本匹配。文本比较区分大小写，“为空”识别缺失值、空字符串、纯空格、全角空格、不间断空格和常见零宽字符；0 不属于空白。</p>
 <p>配置完成后点击“应用并预览”。需要准确行数时，点击“统计筛选行数”；需要恢复全部记录时，点击“清空筛选与排序”。</p>
 <h3 id="43-设置复合排序">4.3 设置复合排序 </h3>
 <p>点击“＋ 排序字段”，设置字段、升序/降序及文本/数值类型。多个排序字段按界面从上到下的顺序确定优先级。</p>
@@ -360,6 +360,10 @@
 <td>移除本次导入创建的表；一次导入多表时整批撤销</td>
 </tr>
 <tr>
+<td>删除、编辑、新增</td>
+<td>移除本次生成的结果表，回到操作前来源；批量清洗整批撤销</td>
+</tr>
+<tr>
 <td>去重、透视</td>
 <td>移除本次生成的结果表，恢复此前工作区视图；来源表保留</td>
 </tr>
@@ -524,6 +528,51 @@
 </tbody>
 </table>
 <p>Excel 导入与 XLSX 封装需要内存，CSV 分块处理也受设备资源和浏览器存储配额限制。数值汇总使用浮点数，不能替代要求严格十进制精度的财务结算工具。重要结果应导出归档，不以浏览器缓存作为唯一保存位置。</p>
+<h2 id="十一-删除-编辑与新增行110">十一、删除、编辑与新增行（1.1.0） </h2>
+<h3 id="111-按条件删除">11.1 按条件删除 </h3>
+<ol>
+<li>选择当前表，在“预览 · 筛选 · 排序”设置一个或多个条件。</li>
+<li>选择 AND 或 OR；先“应用并预览”并“统计筛选行数”，核对待删除范围。</li>
+<li>点击“删除符合条件的行”，确认后处理整张表的全部匹配记录。修改条件后应重新核对；删除使用按钮点击时的当前条件。</li>
+<li>页面切换至“原表名_清洗”结果表。来源表仍保留，可通过“撤销”移除本次结果。</li>
+</ol>
+<p>必须至少设置一个条件。删除不限当前分页，也不受显示字段选择影响。删除全部匹配行后允许生成只含字段的空表。</p>
+<h3 id="112-删除勾选行">11.2 删除勾选行 </h3>
+<p>在预览左侧勾选记录，或勾选表头复选框选中本页，点击“删除勾选行”。勾选不会跨页保留；翻页、排序或刷新预览后需重新选择。程序使用记录标识定位，不以页面序号定位，排序不会删错行。</p>
+<h3 id="113-编辑与新增">11.3 编辑与新增 </h3>
+<p>点击记录旁的“编辑”，在弹窗中修改字段，选择“保存并生成新表”；隐藏字段也会显示在编辑弹窗中。取消不会写入数据。点击“新增行”填写全部所需字段，新行追加到新结果表末尾。</p>
+<p>输入内容按文本保存，留空保存为空值；不会自动计算公式或推断日期。编辑、新增均保留来源表，并切换到无筛选的新结果表，便于核对。若要连续修改，请继续操作最新结果表；大表生成副本需要时间和额外缓存空间。</p>
+<h3 id="114-多表批量清洗">11.4 多表批量清洗 </h3>
+<p>展开“多表批量清洗”，勾选来源表，复用上方筛选条件后执行。字段按名称匹配，字段顺序可以不同；任何指定字段缺失均跳过该表，即使采用 OR 逻辑也不部分执行。建议一次选择同一工作簿的全部来源，避免把旧结果重复纳入。</p>
+<p>运行中显示总扫描进度，结束显示逐表原行数、删除量、保留量、跳过原因及合计。点击“导出本次清洗工作簿”可将本次结果及跳过的原表合并保存；工作表名自动处理禁用字符、长度和重名。报告关联本次页面会话，刷新后可从表单列表找到结果并逐表导出。</p>
+<p>批量导出为 XLSX，在内存中生成，每张表最多 1,048,575 行明细。超过上限时请分别导出 CSV/TSV/JSON。浏览器支持时使用保存对话框，否则提供下载链接；文件已存在时按浏览器提示处理，建议使用新名称。</p>
+<h3 id="115-保留格式清洗">11.5 保留格式清洗 </h3>
+<p>仅当需要保留原 Excel 格式时使用 Python 可选模式：</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash bash"><code>python <span class="token parameter variable">-m</span> pip <span class="token function">install</span> <span class="token string">"openpyxl&gt;=3.1,&lt;4"</span>
+python main.py --clean-excel <span class="token string">"业务.xlsx"</span> <span class="token parameter variable">--rules</span> <span class="token string">"test/清洗规则示例.json"</span>
+</code></pre><p>规则示例（满足任意条件即删除）：</p>
+<pre data-role="codeBlock" data-info="json" class="language-json json"><code><span class="token punctuation">{</span>
+  <span class="token property">"logic"</span><span class="token operator">:</span> <span class="token string">"OR"</span><span class="token punctuation">,</span>
+  <span class="token property">"rules"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span><span class="token property">"field"</span><span class="token operator">:</span> <span class="token string">"仓库"</span><span class="token punctuation">,</span> <span class="token property">"op"</span><span class="token operator">:</span> <span class="token string">"contains"</span><span class="token punctuation">,</span> <span class="token property">"value"</span><span class="token operator">:</span> <span class="token string">"测试"</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span><span class="token property">"field"</span><span class="token operator">:</span> <span class="token string">"件号"</span><span class="token punctuation">,</span> <span class="token property">"op"</span><span class="token operator">:</span> <span class="token string">"empty"</span><span class="token punctuation">}</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre><p><code>op</code> 可选 <code>contains</code>（包含）、<code>=</code>（完全匹配）、<code>empty</code>（空白）；<code>logic</code> 可选 AND 或 OR。第一行识别字段，重复表头采用最左列。全部工作表参与检查，缺字段的表保留并记录。输出采用新名称，已存在时自动编号，旁边生成 JSON 统计报告。</p>
+<p>普通单元格格式、超链接、批注、行高及隐藏状态随保留记录复制，公式相对引用尝试随移动调整。程序不会重算公式；无缓存公式不直接当作空白，报告显示不确定检查次数。公式返回空字符串与缺失缓存可能无法可靠区分，请先重算保存并核对。复杂合并、外部链接、图表、透视表及跨行公式依赖需用副本验收，不能视为完整 Excel 编辑器。</p>
+<h3 id="116-新功能验收示例">11.6 新功能验收示例 </h3>
+<ul>
+<li>导入 <code>01_去重筛选样例.csv</code>，按“数量数值等于 0”删除，应由 6 行变为 5 行；撤销后回到 6 行来源表。</li>
+<li>按数量降序预览，编辑某条记录的备注，检查编号仍对应原记录，来源表不变。</li>
+<li>新增一行后总行数加 1；撤销后回到新增前的表。</li>
+<li>选择字段不同的多张表批量清洗，核对缺字段的表显示跳过且导出时保留。</li>
+<li>分别检查文件选择、取消编辑、取消保存、保存 XLSX、刷新后逐表导出及缓存清理。</li>
+</ul>
+<h2 id="111-更新计算异常筛选与导航联动">1.1.1 更新：计算异常筛选与导航联动 </h2>
+<p>筛选运算符新增“计算错误”“计算错误或结果为空”。后者匹配错误标记或空值；比较值与文本/数值类型不参与判断，界面自动禁用。也可选择“为空”单独检查空结果。支持预览、统计、筛选导出、删除及批量清洗，仍按 AND/OR 组合条件。</p>
+<p>可识别常见 Excel 错误标记，如 <code>#DIV/0!</code>、<code>#VALUE!</code>、<code>#REF!</code>、<code>#N/A</code>、<code>#NAME?</code>、<code>#NUM!</code>、<code>#SPILL!</code>、<code>#CALC!</code>。按整个单元格值匹配，前后空格忽略，包含错误字样的一段普通说明不会被误判。</p>
+<p>判断依据是导入后的值，不重新计算公式，也不区分原生错误与相同内容的文本。请在导入设置中选择“读取上次保存的计算值”，并先用 Excel 重算、保存。无缓存公式与真正空结果可能都导入为空；普通空单元格也会匹配“结果为空”。如选择“读取公式文本”，不能据此判断公式运行结果。旧缓存若没有保留错误标记，需要重新导入源文件。</p>
+<p>点击工作区“预览 · 筛选 · 排序”“去除重复”“动态数据透视”时，左侧对应导航自动高亮；点击左侧导航也同步切换工作区。点击导入区域时，高亮回到“文件导入”。</p>
 
       </div>
       
