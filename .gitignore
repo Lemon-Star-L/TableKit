@@ -1,0 +1,77 @@
+# 本地 IDE 配置与 Python 虚拟环境
+.idea/
+.vscode/
+.venv/
+venv/
+
+# Python 缓存、测试缓存与构建产物
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# 其他本地业务数据
+/data/
+# output/ 之外的同名生成文件（output/ 在末尾显式放行）
+表格数据处理工作台.html
+
+# 散落在其他位置的数据文件（扩展名大小写均匹配）
+*.[xX][lL][sS]
+*.[xX][lL][sS][xX]
+*.[xX][lL][sS][mM]
+*.[xX][lL][sS][bB]
+*.[cC][sS][vV]
+*.[tT][sS][vV]
+*.[pP][aA][rR][qQ][uU][eE][tT]
+*.[fF][eE][aA][tT][hH][eE][rR]
+*.[pP][kK][lL]
+*.[pP][iI][cC][kK][lL][eE]
+*.[nN][pP][yY]
+*.[nN][pP][zZ]
+*.[dD][bB]
+*.[sS][qQ][lL][iI][tT][eE]
+*.[sS][qQ][lL][iI][tT][eE]3
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite3-wal
+*.sqlite3-shm
+
+# README 的导出副本；保留 README.md
+/README.html
+/README.pdf
+
+# 环境变量；保留不含凭据的示例配置
+.env
+.env.*
+!.env.example
+
+# Office 临时文件、日志及系统缓存
+~$*
+*.log
+*.tmp
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# 保留 assets/ 下的 HTML 模板、JS 解析库、SVG 图标和许可证。
+# 保留 main.py、README.md、pyproject.toml、uv.lock、.gitignore。
+# 本规则不会自动取消已被 Git 跟踪的文件。
+
+# 项目交付与测试资源：完整纳入版本控制（必须放在通用规则之后）
+# 同时放行目录及所有下级文件，覆盖上面的扩展名和缓存忽略规则。
+!/output/
+!/output/**
+!/test/
+!/test/**
+
+# 中文帮助文档：保留 Markdown 手册
+!/help/
+!/help/**/
+!/help/**/*.md
